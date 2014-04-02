@@ -33,10 +33,20 @@
 
 ;;; Code:
 
+(defun boxed-wine--load-user-customizations ()
+  "Load all customizations in `~/.emacs.d/CURRENT-USER'.
+
+Loading messages are suppressed. Skips `custom.el'."
+  (when (file-exists-p current-user-dir)
+    (dolist (file-name (directory-files current-user-dir 't "^[^.#].*\\.el$"))
+      (when (not (string-match-p "/custom\\.el$" file-name))
+        (load file-name nil 't)))))
+
 ;;;###autoload
 (defun boxed-wine-initialize ()
   (let* ((current-user     (getenv "USER"))
          (current-user-dir (expand-file-name current-user user-emacs-directory)))
+    (boxed-wine--load-user-customizations)
     (setq custom-file (expand-file-name "custom.el" current-user-dir))))
 
 (provide 'boxed-wine)
