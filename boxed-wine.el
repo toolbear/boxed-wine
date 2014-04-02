@@ -42,10 +42,28 @@ Loading messages are suppressed. Skips `custom.el'."
       (when (not (string-match-p "/custom\\.el$" file-name))
         (load file-name nil 't)))))
 
+(defun boxed-wine--find-custom-themes ()
+  (dolist (dir (boxed-wine--find-theme-dirs theme-dir))
+    (add-to-list 'custom-theme-load-path dir)))
+
+(defun boxed-wine--find-theme-dirs (parent)
+  "Recursively find directories containing themes under DIR."
+  (let (matches)
+    (cond
+     ((not (file-directory-p parent)))
+
+     ((directory-files parent nil "^[^.#].*-theme\.el$" 't) (list parent))
+
+     (t (dolist (d (directory-files parent 't "^[^.#]" 't))
+          (setq matches (append (boxed-wine--find-theme-dirs d) matches)))
+        matches))))
+
 ;;;###autoload
 (defun boxed-wine-initialize ()
   (let* ((current-user     (getenv "USER"))
-         (current-user-dir (expand-file-name current-user user-emacs-directory)))
+         (current-user-dir (expand-file-name (format "%s.d" current-user) user-emacs-directory))
+         (theme-dir        (expand-file-name "themes" user-emacs-directory)))
+    (boxed-wine--find-custom-themes)
     (boxed-wine--load-user-customizations)
     (setq custom-file (expand-file-name "custom.el" current-user-dir))))
 
