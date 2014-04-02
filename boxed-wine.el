@@ -34,7 +34,10 @@
 ;;; Code:
 
 ;;;###autoload
-(defun boxed-wine-initialize ())
+(defun boxed-wine-initialize ()
+  (let* ((current-user     (getenv "USER"))
+         (current-user-dir (expand-file-name current-user user-emacs-directory)))
+    (setq custom-file (expand-file-name "custom.el" current-user-dir))))
 
 (provide 'boxed-wine)
 
