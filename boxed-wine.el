@@ -61,7 +61,7 @@ Loading messages are suppressed. Skips `custom.el'."
 ;;;###autoload
 (defun boxed-wine-initialize ()
   (let* ((current-user     (getenv "USER"))
-         (current-user-dir (expand-file-name (format "%s.d" current-user) user-emacs-directory))
+         (current-user-dir (expand-file-name current-user user-emacs-directory))
          (theme-dir        (expand-file-name "themes" user-emacs-directory)))
     (boxed-wine--find-custom-themes)
     (boxed-wine--load-user-customizations)
