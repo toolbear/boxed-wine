@@ -63,9 +63,9 @@ Loading messages are suppressed. Skips `custom.el'."
   (let* ((current-user     (getenv "USER"))
          (current-user-dir (expand-file-name current-user user-emacs-directory))
          (theme-dir        (expand-file-name "themes" user-emacs-directory)))
+    (load (setq custom-file (expand-file-name "custom.el" current-user-dir)))
     (boxed-wine--find-custom-themes)
-    (boxed-wine--load-user-customizations)
-    (setq custom-file (expand-file-name "custom.el" current-user-dir))))
+    (boxed-wine--load-user-customizations)))
 
 (provide 'boxed-wine)
 
